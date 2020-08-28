@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+# The kernel and iso
+*.elf
+*.iso
