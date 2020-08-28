@@ -33,3 +33,7 @@
 
 # Boochs log
 boochslog.txt
+
+# The kernel and iso
+*.elf
+*.iso
