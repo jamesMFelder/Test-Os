@@ -1,31 +1,26 @@
-#List of commands and options in variables
-OBJECTS := loader.o
-LDFLAGS := -T linker.ld -melf_x86_64
-AS := nasm
-ASFLAGS := -f elf64
+SOURCES=boot.o kernel.o
 
-#Important targets
-#Default target is to make an iso
+CC=x86_64-linux-gnu-gcc-10
+LD=x86_64-linux-gnu-gcc-10
+AS=nasm
+CFLAGS=-ffreestanding -O2 -Wall -Wextra -std=gnu99 -m32
+LDFLAGS=-Tlinker.ld -nostdlib -lgcc -m32
+ASFLAGS=-felf32
+
 all: os.iso
 
-#The iso needs the kernel
-os.iso: kernel.elf
-	cp kernel.elf iso/boot/kernel.elf
+os.iso: kernel
+	cp kernel iso/boot/kernel
 	grub-mkrescue -o os.iso iso
 
-#Build the kernel from the objects
-kernel.elf: $(OBJECTS)
-	ld $(LDFLAGS) $(OBJECTS) -o kernel.elf
-
-%.o: %.s
-	$(AS) $(ASFLAGS) $< -o $@
-
-
-#Extra targets
-#Run the iso
-run: os.iso
-	echo c | bochs -f bochsrc.txt -q
-
-#Clean up files
 clean:
-	rm -rf *.o kernel.elf os.iso iso/boot/kernel.elf
+	-rm -f *.o kernel iso/boot/kernel os.iso
+
+kernel: $(SOURCES)
+	$(LD) $(LDFLAGS) -o kernel $(SOURCES)
+
+.s.o:
+	$(AS) $(ASFLAGS) $<
+
+run: os.iso
+	echo 'c' | bochs -f bochsrc.txt
