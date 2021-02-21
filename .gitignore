@@ -32,8 +32,12 @@
 *.app
 
 # Boochs log
-boochslog.txt
+bochslog.txt
 
 # The kernel and iso
 *.elf
 *.iso
+
+#Reference materials
+Intel-manual.pdf
+Intel-manual-updates.pdf
