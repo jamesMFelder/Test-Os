@@ -1,9 +1,13 @@
-SOURCES=kernel/boot.o kernel/kernel.o libc/vga/vga.o libc/string/strlen.o libc/stdio/printf.o libc/stdlib/Itoa.c
+ARCH=x86
+KERNEL=arch/$(ARCH)/kernel/boot.o kernel/kernel.o
+DRIVERS=arch/$(ARCH)/kernel/drivers/vga/vga.o
+LIBC=libc/string/strlen.o libc/stdio/printf.o libc/stdlib/Itoa.o
+SOURCES=$(KERNEL) $(DRIVERS) $(LIBC)
 
 CC=x86_64-linux-gnu-gcc-10
 LD=x86_64-linux-gnu-gcc-10
 AS=nasm
-CFLAGS=-ffreestanding -O2 -Wall -Wextra -std=gnu99 -m32 -Ilibc
+CFLAGS=-ffreestanding -O2 -Wall -Wextra -std=gnu99 -m32 -Ilibc -Iarch/$(ARCH)/kernel/drivers -Iarch/$(ARCH)/kernel/headers
 LDFLAGS=-Tlinker.ld -nostdlib -lgcc -m32
 ASFLAGS=-felf32
 

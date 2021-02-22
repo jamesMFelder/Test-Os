@@ -31,6 +31,17 @@ align 16
 stack_bottom:
 resb 16384 ; 16 KiB
 stack_top:
+
+; Preallocate pages used for paging. Don't hard-code addresses and assume they
+; are available, as the bootloader might have loaded its multiboot structures or
+; modules there. This lets the bootloader know it must avoid the addresses.
+section .bss;, "aw", @nobits
+	align 4096
+boot_page_directory:
+	align 4096
+boot_page_table1:
+	align 4096
+; Further page tables may be required if the kernel grows beyond 3 MiB.
  
 ; The linker script specifies _start as the entry point to the kernel and the
 ; bootloader will jump to this position once the kernel has been loaded. It
